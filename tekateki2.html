@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>TEKA-TEKI</title>
+  <style>
+    :root{--bg:#064e3b;--card:#a7f3d0;--accent:#065f46;--success:#16a34a;--danger:#dc2626}
+    *{box-sizing:border-box;font-family:Inter, Roboto, Arial, sans-serif}
+    body{margin:0;background:var(--bg);display:flex;align-items:center;justify-content:center;min-height:100vh;padding:24px}
+    .card{background:var(--card);max-width:720px;width:100%;padding:28px;border-radius:12px;box-shadow:0 8px 30px rgba(20,20,50,0.08)}
+    h1{text-align:center;margin:0 0 18px;color:var(--accent);letter-spacing:2px}
+    p.lead{margin:0 0 18px;font-size:1.05rem}
+    .puzzle{background:#d1fae5;padding:16px;border-radius:8px;border:1px solid #10b981;margin-bottom:18px}
+    .controls{display:flex;gap:10px;flex-wrap:wrap}
+    input[type="text"]{flex:1;padding:10px 12px;border-radius:8px;border:1px solid #059669;font-size:1rem;background:#fff}
+    button{background:var(--accent);color:#fff;padding:10px 14px;border-radius:8px;border:0;font-weight:600;cursor:pointer}
+    button:active{transform:translateY(1px)}
+    .feedback{margin-top:14px;font-weight:600}
+    .success{color:var(--success)}
+    .error{color:var(--danger)}
+    @media (max-width:520px){.controls{flex-direction:column}button{width:100%}}
+  </style>
+</head>
+<body>
+  <main class="card" role="main">
+    <h1>TEKA-TEKI</h1>
+
+    <div class="puzzle" aria-live="polite">
+      <p class="lead">"Aku adalah seekor hewan. Jumlah kakiku ada empat buah. Aku memiliki ekor. Aku juga memiliki belalai. Siapakah aku?"</p>
+    </div>
+
+    <form id="quizForm" onsubmit="return false;" aria-label="Form jawaban teka-teki">
+      <div class="controls">
+        <label for="answer" class="visually-hidden">Jawaban</label>
+        <input id="answer" name="answer" type="text" placeholder="" autocomplete="off" />
+        <button id="checkBtn" type="button">Kirim</button>
+      </div>
+      <div id="feedback" class="feedback" role="status" aria-live="assertive"></div>
+    </form>
+  </main>
+
+  <script>
+    (function(){
+      const accepted = ['gajah']; // diterima dalam bentuk lowercase tanpa spasi
+      const input = document.getElementById('answer');
+      const btn = document.getElementById('checkBtn');
+      const feedback = document.getElementById('feedback');
+
+      function normalize(s){
+        return String(s||'').trim().toLowerCase();
+      }
+
+      function check(){
+        const val = normalize(input.value);
+        if(!val){
+          feedback.textContent = 'Silakan masukkan jawaban terlebih dahulu.';
+          feedback.className = 'feedback error';
+          return;
+        }
+
+        if(accepted.includes(val)){
+          feedback.textContent = 'Jawaban Anda benar, hebat';
+          feedback.className = 'feedback success';
+        } else {
+          feedback.textContent = 'Jawaban Anda salah, silahkan coba lagi.';
+          feedback.className = 'feedback error';
+        }
+      }
+
+      btn.addEventListener('click', check);
+      input.addEventListener('keydown', function(e){
+        if(e.key === 'Enter') check();
+      });
+
+      window.addEventListener('load', ()=> input.focus());
+    })();
+  </script>
+</body>
+</html>
