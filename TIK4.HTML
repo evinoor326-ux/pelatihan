@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Pilih Alat Input Komputer - Drag & Drop (Gambar Nyata)</title>
+  <style>
+    :root{
+      --bg:#08203a; /* dark blue background */
+      --skin:#ffc0cb; /* pink skin */
+      --textarea-bg:#000000; /* black textarea */
+      --card-size:110px;
+      --gap:12px;
+    }
+    html,body{height:100%;margin:0;font-family:system-ui,Segoe UI,Arial}
+    body{background:var(--bg);display:flex;align-items:center;justify-content:center;padding:24px}
+
+    .wrapper{width:980px;max-width:95%;background:var(--skin);border-radius:12px;padding:18px;box-shadow:0 8px 24px rgba(0,0,0,0.35)}
+    h1{margin:0 0 8px;font-size:20px;color:#3a0b1d}
+    p.instr{margin:6px 0 14px;color:#3a0b1d}
+
+    .top-area{display:flex;gap:var(--gap);align-items:flex-start}
+    .cards{display:flex;flex-wrap:wrap;gap:10px;flex:1;padding:12px;background:rgba(255,255,255,0.12);border-radius:8px;min-height:220px}
+    .card{width:var(--card-size);height:var(--card-size);display:flex;align-items:center;justify-content:center;flex-direction:column;border-radius:8px;background:#fff;padding:8px;box-shadow:0 3px 8px rgba(0,0,0,0.12);cursor:grab}
+    .card.dragging{opacity:0.45}
+    .card img{width:72px;height:50px;object-fit:contain}
+    .card .name{font-size:12px;margin-top:6px;color:#333}
+
+    .drop-col{width:360px}
+    textarea#dropzone{width:100%;height:220px;background:var(--textarea-bg);color:#fff;border-radius:8px;padding:10px;font-size:14px;resize:none;border:2px dashed rgba(255,255,255,0.12);outline:none}
+    .drop-hint{font-size:12px;color:#3a0b1d;margin-top:8px}
+
+    .controls{display:flex;gap:8px;margin-top:14px;align-items:center}
+    button{padding:10px 14px;border-radius:8px;border:none;cursor:pointer;font-weight:700}
+    button#check{background:#2e7d32;color:#fff}
+    button#reset{background:#c62828;color:#fff}
+
+    .feedback{margin-left:12px;font-weight:700}
+
+    @media (max-width:880px){
+      .top-area{flex-direction:column}
+      .drop-col{width:100%}
+    }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <h1>Pilih Alat Input Komputer</h1>
+    <p class="instr">Seret gambar perangkat input ke area teks (kanan). Urutan jawaban yang benar: <code>keyboard-microphone-mouse</code>.</p>
+
+    <div class="top-area">
+      <div class="cards" id="cardsContainer" aria-label="Kumpulan gambar perangkat input"></div>
+
+      <div class="drop-col">
+        <textarea id="dropzone" placeholder="Tarik gambar ke sini (drag & drop)" aria-label="Area jawaban"></textarea>
+        <div class="drop-hint">Klik <strong>Hasil</strong> untuk melihat feedback atau <strong>Reset</strong> untuk mengacak ulang.</div>
+      </div>
+    </div>
+
+    <div class="controls">
+      <button id="check">Hasil</button>
+      <button id="reset">Reset</button>
+      <div class="feedback" id="feedbackArea" aria-live="polite"></div>
+    </div>
+  </div>
+
+  <script>
+    // NOTE: Jika Anda punya gambar nyata, letakkan di folder 'images' berdampingan dengan file HTML:
+    // images/keyboard.png, images/speaker.png, images/monitor.png, images/mouse.png, images/microphone.png, images/printer.png
+    // Jika tidak ada, kode akan menampilkan fallback SVG sederhana.
+
+    const imagePath = 'images/';
+
+    const devices = [
+      {id:'keyboard', label:'Keyboard', file:'keyboard.png'},
+      {id:'speaker', label:'Speaker', file:'speaker.png'},
+      {id:'monitor', label:'Monitor', file:'monitor.png'},
+      {id:'mouse', label:'Mouse', file:'mouse.png'},
+      {id:'microphone', label:'Microphone', file:'microphone.png'},
+      {id:'printer', label:'Printer', file:'printer.png'}
+    ];
+
+    const cardsContainer = document.getElementById('cardsContainer');
+    const dropzone = document.getElementById('dropzone');
+    const feedbackArea = document.getElementById('feedbackArea');
+    const checkBtn = document.getElementById('check');
+    const resetBtn = document.getElementById('reset');
+
+    function shuffle(array){
+      for(let i=array.length-1;i>0;i--){
+        const j=Math.floor(Math.random()*(i+1));
+        [array[i],array[j]]=[array[j],array[i]];
+      }
+      return array;
+    }
+
+    function fallbackSVG(label){
+      const svg = `<svg xmlns='http://www.w3.org/2000/svg' width='120' height='80' viewBox='0 0 100 70'><rect width='100' height='70' rx='8' fill='%23ffffff' opacity='0.001'/><text x='50%' y='50%' font-size='10' dominant-baseline='middle' text-anchor='middle' fill='%23333'>${label}</text></svg>`;
+      return 'data:image/svg+xml;utf8,' + encodeURIComponent(svg);
+    }
+
+    function renderCards(){
+      cardsContainer.innerHTML = '';
+      const list = shuffle(devices.slice());
+      list.forEach(dev => {
+        const card = document.createElement('div');
+        card.className='card';
+        card.setAttribute('draggable','true');
+        card.dataset.id = dev.id;
+
+        const img = document.createElement('img');
+        img.alt = dev.label;
+        img.src = imagePath + dev.file;
+        img.onerror = ()=> { img.src = fallbackSVG(dev.label); };
+        card.appendChild(img);
+
+        const name = document.createElement('div');
+        name.className='name';
+        name.textContent = dev.label;
+        card.appendChild(name);
+
+        card.addEventListener('dragstart', (e)=>{
+          e.dataTransfer.setData('text/plain', dev.id);
+          card.classList.add('dragging');
+        });
+        card.addEventListener('dragend', ()=>card.classList.remove('dragging'));
+
+        card.tabIndex = 0;
+        card.addEventListener('keydown', (e)=>{
+          if(e.key === 'Enter'){ simulateDrop(dev.id, card); }
+        });
+
+        cardsContainer.appendChild(card);
+      });
+    }
+
+    function simulateDrop(id, card){
+      const current = dropzone.value.trim();
+      dropzone.value = current.length ? `${current}-${id}` : id;
+      card.style.display = 'none';
+    }
+
+    // initial render
+    renderCards();
+
+    // drop handlers
+    dropzone.addEventListener('dragover', (e)=>{ e.preventDefault(); });
+    dropzone.addEventListener('drop', (e)=>{
+      e.preventDefault();
+      const id = e.dataTransfer.getData('text/plain') || '';
+      if(!id) return;
+      const card = Array.from(cardsContainer.children).find(c=>c.dataset.id===id);
+      if(!card) return;
+      simulateDrop(id, card);
+      feedbackArea.textContent = '';
+    });
+
+    // Hasil check
+    checkBtn.addEventListener('click', ()=>{
+      const ans = dropzone.value.trim().replace(/\s+/g,'');
+      const correct = 'keyboard-microphone-mouse';
+      if(ans.toLowerCase()===correct){
+        feedbackArea.style.color = '#0b6b1a';
+        feedbackArea.textContent = 'Hebat Jawaban Anda Benar';
+      } else {
+        feedbackArea.style.color = '#7f0b0b';
+        feedbackArea.textContent = 'Maaf. Jawaban Anda Salah Ulangi Lagi';
+      }
+    });
+
+    // Reset
+    resetBtn.addEventListener('click', ()=>{
+      dropzone.value = '';
+      feedbackArea.textContent = '';
+      renderCards();
+    });
+
+    // undo last (double click textarea)
+    dropzone.addEventListener('dblclick', ()=>{
+      const parts = dropzone.value.trim().split('-').filter(Boolean);
+      if(parts.length === 0) return;
+      const removed = parts.pop();
+      dropzone.value = parts.join('-');
+      const card = Array.from(cardsContainer.children).find(c=>c.dataset.id===removed);
+      if(card) card.style.display = 'flex';
+    });
+  </script>
+</body>
+</html>
