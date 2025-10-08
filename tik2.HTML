@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Pilih Alat Input Komputer - Drag & Drop (Dengan Gambar)</title>
+  <style>
+    :root{
+      --bg:#08203a; /* dark blue background */
+      --skin:#ffc0cb; /* pink skin */
+      --textarea-bg:#000000; /* black textarea */
+      --card-size:120px;
+      --gap:12px;
+    }
+    html,body{height:100%;margin:0;font-family:system-ui,Segoe UI,Arial}
+    body{background:var(--bg);display:flex;align-items:center;justify-content:center;padding:24px}
+
+    .wrapper{width:980px;max-width:95%;background:var(--skin);border-radius:12px;padding:18px;box-shadow:0 8px 24px rgba(0,0,0,0.35)}
+    h1{margin:0 0 6px;font-size:20px;color:#3a0b1d}
+    p.instr{margin:6px 0 14px;color:#3a0b1d}
+
+    .top-area{display:flex;gap:var(--gap);align-items:flex-start}
+    .cards{display:flex;flex-wrap:wrap;gap:10px;flex:1;padding:12px;background:rgba(255,255,255,0.12);border-radius:8px;min-height:220px}
+    .card{width:var(--card-size);height:var(--card-size);display:flex;align-items:center;justify-content:center;flex-direction:column;border-radius:8px;background:#fff;padding:8px;box-shadow:0 3px 8px rgba(0,0,0,0.12);cursor:grab}
+    .card.dragging{opacity:0.45}
+    .card img{width:64px;height:48px;object-fit:contain}
+    .card .name{font-size:12px;margin-top:6px;color:#333}
+
+    .drop-col{width:360px}
+    textarea#dropzone{width:100%;height:220px;background:var(--textarea-bg);color:#fff;border-radius:8px;padding:10px;font-size:14px;resize:none;border:2px dashed rgba(255,255,255,0.12);outline:none}
+    .drop-hint{font-size:12px;color:#3a0b1d;margin-top:8px}
+
+    .controls{display:flex;gap:8px;margin-top:14px;align-items:center}
+    button{padding:10px 14px;border-radius:8px;border:none;cursor:pointer;font-weight:700}
+    button#check{background:#2e7d32;color:#fff}
+    button#reset{background:#c62828;color:#fff}
+
+    .feedback{margin-left:12px;font-weight:700}
+
+    @media (max-width:880px){
+      .top-area{flex-direction:column}
+      .drop-col{width:100%}
+    }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <h1>Pilih Alat Input Komputer</h1>
+    <p class="instr">Seret gambar perangkat input ke area teks (kanan). Urutan jawaban yang dianggap benar adalah: <code>keyboard-microphone-mouse</code>.</p>
+
+    <div class="top-area">
+      <div class="cards" id="cardsContainer" aria-label="Kumpulan gambar perangkat input"></div>
+
+      <div class="drop-col">
+        <textarea id="dropzone" placeholder="Tarik gambar ke sini (drag & drop)" aria-label="Area jawaban"></textarea>
+        <div class="drop-hint">Klik <strong>Hasil</strong> untuk melihat feedback atau <strong>Reset</strong> untuk mengacak ulang.</div>
+      </div>
+    </div>
+
+    <div class="controls">
+      <button id="check">Hasil</button>
+      <button id="reset">Reset</button>
+      <div class="feedback" id="feedbackArea" aria-live="polite"></div>
+    </div>
+  </div>
+
+  <script>
+    // Perangkat beserta gambar (SVG inline sebagai data URL) - gambar disediakan sebagai ikon sederhana
+    const devices = [
+      {id:'keyboard', label:'Keyboard', img: svgIcon('keyboard')},
+      {id:'speaker', label:'Speaker', img: svgIcon('speaker')},
+      {id:'monitor', label:'Monitor', img: svgIcon('monitor')},
+      {id:'mouse', label:'Mouse', img: svgIcon('mouse')},
+      {id:'microphone', label:'Microphone', img: svgIcon('microphone')},
+      {id:'printer', label:'Printer', img: svgIcon('printer')}
+    ];
+
+    const cardsContainer = document.getElementById('cardsContainer');
+    const dropzone = document.getElementById('dropzone');
+    const feedbackArea = document.getElementById('feedbackArea');
+    const checkBtn = document.getElementById('check');
+    const resetBtn = document.getElementById('reset');
+
+    function shuffle(array){
+      for(let i=array.length-1;i>0;i--){
+        const j=Math.floor(Math.random()*(i+1));
+        [array[i],arra
