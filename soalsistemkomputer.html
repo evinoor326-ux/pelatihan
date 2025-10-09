@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kuis Sistem Komputer - Informatika Kelas 7</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            box-sizing: border-box;
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .pulse-animation {
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        .correct-answer {
+            background-color: #dcfce7 !important;
+            border-color: #16a34a !important;
+        }
+        .wrong-answer {
+            background-color: #fef2f2 !important;
+            border-color: #dc2626 !important;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-full">
+    <div class="container mx-auto px-4 py-6">
+        <!-- Header -->
+        <header class="text-center mb-8">
+            <div class="bg-white rounded-lg shadow-md p-4 mb-4 inline-block">
+                <p class="text-sm text-gray-600 mb-1">Penyusun:</p>
+                <p class="text-lg font-semibold text-indigo-800">Evi Noor Hidayah, S. Pd.I.</p>
+            </div>
+            <h1 class="text-4xl font-bold text-indigo-800 mb-2">🎯 Kuis Sistem Komputer</h1>
+            <p class="text-lg text-gray-600">Informatika Kelas 7 Semester Genap</p>
+            <div class="mt-4 bg-white rounded-lg shadow-md p-4 inline-block">
+                <p class="text-sm text-gray-500">10 Soal • Nilai per soal: 10 poin • Total: 100 poin</p>
+            </div>
+        </header>
+
+        <!-- Quiz Container -->
+        <div class="max-w-4xl mx-auto">
+            <!-- Start Screen -->
+            <div id="start-screen" class="bg-white rounded-xl shadow-lg p-8 text-center fade-in">
+                <div class="mb-6">
+                    <svg class="mx-auto pulse-animation" width="200" height="150" viewBox="0 0 200 150">
+                        <!-- Computer -->
+                        <rect x="30" y="40" width="140" height="80" rx="8" fill="#3b82f6" stroke="#1e40af" stroke-width="2"/>
+                        <rect x="40" y="50" width="120" height="60" fill="#60a5fa"/>
+                        <text x="100" y="85" text-anchor="middle" fill="white" font-size="12" font-weight="bold">KUIS</text>
+                        
+                        <!-- Stand -->
+                        <rect x="85" y="120" width="30" height="15" fill="#374151"/>
+                        <rect x="60" y="135" width="80" height="8" rx="4" fill="#6b7280"/>
+                        
+                        <!-- Quiz elements -->
+                        <circle cx="50" cy="25" r="8" fill="#f59e0b"/>
+                        <text x="50" y="30" text-anchor="middle" fill="white" font-size="10" font-weight="bold">?</text>
+                        <circle cx="100" cy="15" r="8" fill="#10b981"/>
+                        <text x="100" y="20" text-anchor="middle" fill="white" font-size="10" font-weight="bold">!</text>
+                        <circle cx="150" cy="25" r="8" fill="#ef4444"/>
+                        <text x="150" y="30" text-anchor="middle" fill="white" font-size="10" font-weight="bold">★</text>
+                    </svg>
+                </div>
+                
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">Selamat Datang di Kuis Sistem Komputer!</h2>
+                <div class="bg-blue-50 p-6 rounded-lg mb-6 border border-blue-200">
+                    <h3 class="font-semibold text-blue-800 mb-3">📋 Petunjuk Kuis:</h3>
+                    <ul class="text-left text-blue-700 space-y-2">
+                        <li>• Kuis terdiri dari 10 soal pilihan ganda</li>
+                        <li>• Setiap soal bernilai 10 poin</li>
+                        <li>• Total nilai maksimal: 100 poin</li>
+                        <li>• Pilih jawaban yang paling tepat</li>
+                        <li>• Klik "Mulai Kuis" untuk memulai</li>
+                    </ul>
+                </div>
+                
+                <button onclick="startQuiz()" class="bg-indigo-600 text-white px-8 py-3 rounded-lg text-lg font-semibold hover:bg-indigo-700 transition-colors">
+                    🚀 Mulai Kuis
+                </button>
+            </div>
+
+            <!-- Quiz Screen -->
+            <div id="quiz-screen" class="hidden">
+                <div class="bg-white rounded-xl shadow-lg p-8 mb-6">
+                    <!-- Progress Bar -->
+                    <div class="mb-6">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-sm font-medium text-gray-600">Progress</span>
+                            <span class="text-sm font-medium text-gray-600"><span id="current-question">1</span>/10</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2">
+                            <div id="progress-bar" class="bg-indigo-600 h-2 rounded-full transition-all duration-300" style="width: 10%"></div>
+                        </div>
+                    </div>
+
+                    <!-- Question -->
+                    <div class="mb-6">
+                        <h3 class="text-xl font-bold text-gray-800 mb-4">
+                            Soal <span id="question-number">1</span> 
+                            <span class="text-sm font-normal text-gray-600">(Nilai: 10 poin)</span>
+                        </h3>
+                        
+                        <!-- Question Image -->
+                        <div id="question-image" class="mb-4 text-center">
+                            <!-- Image will be inserted here -->
+                        </div>
+                        
+                        <p id="question-text" class="text-lg text-gray-700 leading-relaxed">Loading...</p>
+                    </div>
+                    
+                    <!-- Options -->
+                    <div id="options-container" class="space-y-3 mb-6">
+                        <!-- Options will be inserted here -->
+                    </div>
+                    
+                    <!-- Navigation -->
+                    <div class="flex justify-between items-center">
+                        <div class="text-sm text-gray-600">
+                            Skor saat ini: <span id="current-score" class="font-semibold text-indigo-600">0</span>/100
+                        </div>
+                        <button id="next-btn" onclick="nextQuestion()" class="bg-indigo-600 text-white px-6 py-2 rounded-lg hover:bg-indigo-700 transition-colors disabled:bg-gray-400" disabled>
+                            Selanjutnya
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Result Screen -->
+            <div id="result-screen" class="hidden bg-white rounded-xl shadow-lg p-8 text-center fade-in">
+                <div class="mb-6">
+                    <div id="result-icon" class="text-8xl mb-4">🎉</div>
+                    <h2 class="text-3xl font-bold text-gray-800 mb-2">Kuis Selesai!</h2>
+                </div>
+                
+                <div class="bg-gradient-to-r from-indigo-50 to-blue-50 p-6 rounded-lg mb-6 border border-indigo-200">
+                    <h3 class="text-2xl font-bold text-indigo-800 mb-4">Hasil Kuis Anda</h3>
+                    <div class="grid md:grid-cols-3 gap-4 text-center">
+                        <div class="bg-white p-4 rounded-lg">
+                            <p class="text-sm text-gray-600 mb-1">Skor Akhir</p>
+                            <p id="final-score" class="text-3xl font-bold text-indigo-600">0</p>
+                            <p class="text-sm text-gray-500">dari 100</p>
+                        </div>
+                        <div class="bg-white p-4 rounded-lg">
+                            <p class="text-sm text-gray-600 mb-1">Jawaban Benar</p>
+                            <p id="correct-answers" class="text-3xl font-bold text-green-600">0</p>
+                            <p class="text-sm text-gray-500">dari 10</p>
+                        </div>
+                        <div class="bg-white p-4 rounded-lg">
+                            <p class="text-sm text-gray-600 mb-1">Persentase</p>
+                            <p id="percentage" class="text-3xl font-bold text-purple-600">0%</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="grade-message" class="text-xl text-gray-700 mb-6 p-4 rounded-lg"></div>
+                
+                <div class="space-x-4">
+                    <button onclick="restartQuiz()" class="bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 transition-colors">
+                        🔄 Ulangi Kuis
+                    </button>
+                    <button onclick="showReview()" class="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-colors">
+                        📋 Lihat Pembahasan
+                    </button>
+                </div>
+            </div>
+
+            <!-- Review Screen -->
+            <div id="review-screen" class="hidden">
+                <div class="bg-white rounded-xl shadow-lg p-8">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">📋 Pembahasan Jawaban</h2>
+                    <div id="review-content">
+                        <!-- Review content will be inserted here -->
+                    </div>
+                    <div class="text-center mt-6">
+                        <button onclick="restartQuiz()" class="bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 transition-colors">
+                            🔄 Kembali ke Awal
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Quiz data with images
+        const quizData = [
+            {
+                question: "Apa kepanjangan dari CPU?",
+                image: `<svg width="150" height="100" viewBox="0 0 150 100" class="mx-auto mb-4">
+                    <rect x="25" y="25" width="100" height="50" rx="5" fill="#3b82f6" stroke="#1e40af" stroke-width="2"/>
+                    <text x="75" y="45" text-anchor="middle" fill="white" font-size="12" font-weight="bold">CPU</text>
+                    <text x="75" y="60" text-anchor="middle" fill="white" font-size="8">Processor</text>
+                    <circle cx="35" cy="35" r="3" fill="#fbbf24"/>
+                    <circle cx="115" cy="35" r="3" fill="#fbbf24"/>
+                    <circle cx="35" cy="65" r="3" fill="#fbbf24"/>
+                    <circle cx="115" cy="65" r="3" fill="#fbbf24"/>
+                </svg>`,
+                options: [
+                    "Central Processing Unit",
+                    "Computer Personal Unit", 
+                    "Central Program Unit",
+                    "Computer Processing Unit"
+                ],
+                correct: 0,
+                explanation: "CPU adalah Central Processing Unit, yaitu unit pemrosesan pusat yang berfungsi sebagai 'otak' komputer untuk memproses semua instruksi dan data."
+            },
+            {
+                question: "Manakah yang termasuk perangkat input?",
+                image: `<svg width="200" height="120" viewBox="0 0 200 120" class="mx-auto mb-4">
+                    <rect x="20" y="80" width="80" height="25" rx="3" fill="#6b7280" stroke="#374151" stroke-width="2"/>
+                    <text x="60" y="97" text-anchor="middle" fill="white" font-size="10" font-weight="bold">Keyboard</text>
+                    <ellipse cx="130" cy="92" rx="20" ry="12" fill="#6b7280" stroke="#374151" stroke-width="2"/>
+                    <text x="130" y="97" text-anchor="middle" fill="white" font-size="8" font-weight="bold">Mouse</text>
+                    <rect x="70" y="20" width="60" height="40" rx="3" fill="#8b5cf6" stroke="#7c3aed" stroke-width="2"/>
+                    <text x="100" y="43" text-anchor="middle" fill="white" font-size="8" font-weight="bold">Monitor</text>
+                </svg>`,
+                options: [
+                    "Monitor",
+                    "Speaker",
+                    "Keyboard", 
+                    "Printer"
+                ],
+                correct: 2,
+                explanation: "Keyboard adalah perangkat input yang digunakan untuk memasukkan teks dan perintah ke dalam komputer."
+            },
+            {
+                question: "Apa fungsi utama dari RAM?",
+                image: `<svg width="150" height="100" viewBox="0 0 150 100" class="mx-auto mb-4">
+                    <rect x="30" y="35" width="90" height="30" rx="3" fill="#10b981" stroke="#059669" stroke-width="2"/>
+                    <text x="75" y="55" text-anchor="middle" fill="white" font-size="12" font-weight="bold">RAM</text>
+                    <rect x="40" y="40" width="8" height="20" fill="#34d399"/>
+                    <rect x="52" y="40" width="8" height="20" fill="#34d399"/>
+                    <rect x="64" y="40" width="8" height="20" fill="#34d399"/>
+                    <rect x="76" y="40" width="8" height="20" fill="#34d399"/>
+                    <rect x="88" y="40" width="8" height="20" fill="#34d399"/>
+                    <rect x="100" y="40" width="8" height="20" fill="#34d399"/>
+                </svg>`,
+                options: [
+                    "Menyimpan data permanen",
+                    "Memproses data",
+                    "Menyimpan data sementara",
+                    "Menampilkan gambar"
+                ],
+                correct: 2,
+                explanation: "RAM (Random Access Memory) berfungsi untuk menyimpan data sementara yang sedang diproses oleh CPU. Data akan hilang ketika komputer dimatikan."
+            },
+            {
+                question: "Manakah yang termasuk sistem operasi?",
+                image: `<svg width="180" height="120" viewBox="0 0 180 120" class="mx-auto mb-4">
+                    <rect x="20" y="20" width="50" height="40" rx="5" fill="#0ea5e9" stroke="#0284c7" stroke-width="2"/>
+                    <text x="45" y="43" text-anchor="middle" fill="white" font-size="10" font-weight="bold">Windows</text>
+                    <rect x="80" y="20" width="50" height="40" rx="5" fill="#6366f1" stroke="#4f46e5" stroke-width="2"/>
+                    <text x="105" y="43" text-anchor="middle" fill="white" font-size="10" font-weight="bold">macOS</text>
+                    <rect x="50" y="70" width="50" height="40" rx="5" fill="#f59e0b" stroke="#d97706" stroke-width="2"/>
+                    <text x="75" y="93" text-anchor="middle" fill="white" font-size="10" font-weight="bold">Linux</text>
+                </svg>`,
+                options: [
+                    "Microsoft Word",
+                    "Google Chrome", 
+                    "Windows 11",
+                    "Adobe Photoshop"
+                ],
+                correct: 2,
+                explanation: "Windows 11 adalah sistem operasi yang mengelola semua hardware dan software pada komputer. Sistem operasi lainnya adalah macOS dan Linux."
+            },
+            {
+                question: "Perangkat mana yang berfungsi sebagai output?",
+                image: `<svg width="200" height="120" viewBox="0 0 200 120" class="mx-auto mb-4">
+                    <rect x="30" y="20" width="80" height="50" rx="5" fill="#6366f1" stroke="#4f46e5" stroke-width="2"/>
+                    <rect x="35" y="25" width="70" height="40" fill="#a5b4fc"/>
+                    <text x="70" y="48" text-anchor="middle" fill="#4f46e5" font-size="10" font-weight="bold">Monitor</text>
+                    <rect x="120" y="40" width="50" height="30" rx="3" fill="#374151" stroke="#1f2937" stroke-width="2"/>
+                    <text x="145" y="58" text-anchor="middle" fill="white" font-size="8" font-weight="bold">Printer</text>
+                    <circle cx="145" cy="90" r="15" fill="#f59e0b" stroke="#d97706" stroke-width="2"/>
+                    <text x="145" y="95" text-anchor="middle" fill="white" font-size="8" font-weight="bold">Speaker</text>
+                </svg>`,
+                options: [
+                    "Keyboard",
+                    "Mouse",
+                    "Monitor",
+                    "Microphone"
+                ],
+                correct: 2,
+                explanation: "Monitor adalah perangkat output yang menampilkan informasi visual dari komputer. Perangkat output lainnya adalah printer dan speaker."
+            },
+            {
+                question: "Apa yang dimaksud dengan motherboard?",
+                image: `<svg width="180" height="120" viewBox="0 0 180 120" class="mx-auto mb-4">
+                    <rect x="20" y="20" width="140" height="80" rx="5" fill="#059669" stroke="#047857" stroke-width="2"/>
+                    <text x="90" y="65" text-anchor="middle" fill="white" font-size="12" font-weight="bold">Motherboard</text>
+                    <rect x="30" y="30" width="20" height="15" fill="#3b82f6"/>
+                    <rect x="130" y="30" width="20" height="15" fill="#f59e0b"/>
+                    <rect x="30" y="75" width="20" height="15" fill="#ef4444"/>
+                    <rect x="130" y="75" width="20" height="15" fill="#8b5cf6"/>
+                    <circle cx="90" cy="40" r="8" fill="#6b7280"/>
+                    <circle cx="90" cy="80" r="8" fill="#6b7280"/>
+                </svg>`,
+                options: [
+                    "Papan induk yang menghubungkan semua komponen",
+                    "Tempat penyimpanan data",
+                    "Alat untuk mendinginkan komputer",
+                    "Perangkat untuk koneksi internet"
+                ],
+                correct: 0,
+                explanation: "Motherboard adalah papan induk atau papan sirkuit utama yang menghubungkan semua komponen komputer seperti CPU, RAM, dan perangkat lainnya."
+            },
+            {
+                question: "Siapa yang disebut sebagai brainware?",
+                image: `<svg width="200" height="120" viewBox="0 0 200 120" class="mx-auto mb-4">
+                    <circle cx="60" cy="40" r="25" fill="#f59e0b" stroke="#d97706" stroke-width="2"/>
+                    <text x="60" y="47" text-anchor="middle" fill="white" font-size="20">👨‍💻</text>
+                    <text x="60" y="80" text-anchor="middle" fill="#374151" font-size="10" font-weight="bold">Programmer</text>
+                    <circle cx="100" cy="40" r="25" fill="#10b981" stroke="#059669" stroke-width="2"/>
+                    <text x="100" y="47" text-anchor="middle" fill="white" font-size="20">👨‍🔧</text>
+                    <text x="100" y="80" text-anchor="middle" fill="#374151" font-size="10" font-weight="bold">Admin</text>
+                    <circle cx="140" cy="40" r="25" fill="#3b82f6" stroke="#1e40af" stroke-width="2"/>
+                    <text x="140" y="47" text-anchor="middle" fill="white" font-size="20">👤</text>
+                    <text x="140" y="80" text-anchor="middle" fill="#374151" font-size="10" font-weight="bold">User</text>
+                </svg>`,
+                options: [
+                    "Perangkat keras komputer",
+                    "Program aplikasi",
+                    "Pengguna atau manusia yang mengoperasikan komputer",
+                    "Sistem operasi"
+                ],
+                correct: 2,
+                explanation: "Brainware adalah manusia atau pengguna yang mengoperasikan komputer, termasuk programmer, system administrator, dan end user."
+            },
+            {
+                question: "Manakah yang termasuk perangkat penyimpanan (storage)?",
+                image: `<svg width="200" height="120" viewBox="0 0 200 120" class="mx-auto mb-4">
+                    <rect x="30" y="30" width="50" height="35" rx="3" fill="#374151" stroke="#1f2937" stroke-width="2"/>
+                    <text x="55" y="50" text-anchor="middle" fill="white" font-size="10" font-weight="bold">Hard Disk</text>
+                    <rect x="90" y="35" width="40" height="25" rx="2" fill="#6366f1" stroke="#4f46e5" stroke-width="2"/>
+                    <text x="110" y="50" text-anchor="middle" fill="white" font-size="8" font-weight="bold">SSD</text>
+                    <rect x="140" y="40" width="30" height="15" rx="2" fill="#f59e0b" stroke="#d97706" stroke-width="2"/>
+                    <text x="155" y="50" text-anchor="middle" fill="white" font-size="7" font-weight="bold">USB</text>
+                </svg>`,
+                options: [
+                    "Monitor",
+                    "Hard Disk",
+                    "Speaker",
+                    "Keyboard"
+                ],
+                correct: 1,
+                explanation: "Hard Disk adalah perangkat penyimpanan yang menyimpan data secara permanen. Perangkat penyimpanan lainnya adalah SSD, USB flash drive, dan CD/DVD."
+            },
+            {
+                question: "Apa perbedaan utama antara hardware dan software?",
+                image: `<svg width="200" height="120" viewBox="0 0 200 120" class="mx-auto mb-4">
+                    <rect x="20" y="20" width="70" height="80" rx="5" fill="#3b82f6" stroke="#1e40af" stroke-width="2"/>
+                    <text x="55" y="45" text-anchor="middle" fill="white" font-size="12" font-weight="bold">Hardware</text>
+                    <text x="55" y="65" text-anchor="middle" fill="white" font-size="8">Dapat disentuh</text>
+                    <text x="55" y="80" text-anchor="middle" fill="white" font-size="8">Fisik</text>
+                    <rect x="110" y="20" width="70" height="80" rx="5" fill="#8b5cf6" stroke="#7c3aed" stroke-width="2"/>
+                    <text x="145" y="45" text-anchor="middle" fill="white" font-size="12" font-weight="bold">Software</text>
+                    <text x="145" y="65" text-anchor="middle" fill="white" font-size="8">Tidak dapat disentuh</text>
+                    <text x="145" y="80" text-anchor="middle" fill="white" font-size="8">Program</text>
+                </svg>`,
+                options: [
+                    "Hardware adalah program, software adalah perangkat fisik",
+                    "Hardware adalah perangkat fisik, software adalah program",
+                    "Keduanya sama saja",
+                    "Hardware lebih mahal dari software"
+                ],
+                correct: 1,
+                explanation: "Hardware adalah komponen fisik komputer yang dapat disentuh (CPU, RAM, monitor), sedangkan software adalah program atau instruksi yang tidak dapat disentuh (Windows, Word, games)."
+            },
+            {
+                question: "Urutan yang benar dalam pemrosesan data komputer adalah:",
+                image: `<svg width="250" height="100" viewBox="0 0 250 100" class="mx-auto mb-4">
+                    <rect x="10" y="35" width="50" height="30" rx="5" fill="#10b981" stroke="#059669" stroke-width="2"/>
+                    <text x="35" y="53" text-anchor="middle" fill="white" font-size="10" font-weight="bold">INPUT</text>
+                    <path d="M 65 50 L 85 50" stroke="#374151" stroke-width="2" marker-end="url(#arrowhead)" fill="none"/>
+                    <rect x="90" y="35" width="60" height="30" rx="5" fill="#3b82f6" stroke="#1e40af" stroke-width="2"/>
+                    <text x="120" y="53" text-anchor="middle" fill="white" font-size="10" font-weight="bold">PROCESS</text>
+                    <path d="M 155 50 L 175 50" stroke="#374151" stroke-width="2" marker-end="url(#arrowhead)" fill="none"/>
+                    <rect x="180" y="35" width="50" height="30" rx="5" fill="#f59e0b" stroke="#d97706" stroke-width="2"/>
+                    <text x="205" y="53" text-anchor="middle" fill="white" font-size="10" font-weight="bold">OUTPUT</text>
+                    <defs>
+                        <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                            <polygon points="0 0, 10 3.5, 0 7" fill="#374151"/>
+                        </marker>
+                    </defs>
+                </svg>`,
+                options: [
+                    "Output → Input → Process",
+                    "Process → Input → Output", 
+                    "Input → Process → Output",
+                    "Input → Output → Process"
+                ],
+                correct: 2,
+                explanation: "Urutan pemrosesan data yang benar adalah Input (memasukkan data) → Process (memproses data) → Output (mengeluarkan hasil). Ini disebut siklus IPO (Input-Process-Output)."
+            }
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+        let userAnswers = [];
+        let selectedAnswer = null;
+
+        function startQuiz() {
+            document.getElementById('start-screen').classList.add('hidden');
+            document.getElementById('quiz-screen').classList.remove('hidden');
+            currentQuestion = 0;
+            score = 0;
+            userAnswers = [];
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            const question = quizData[currentQuestion];
+            
+            // Update progress
+            document.getElementById('current-question').textContent = currentQuestion + 1;
+            document.getElementById('question-number').textContent = currentQuestion + 1;
+            document.getElementById('progress-bar').style.width = ((currentQuestion + 1) / 10 * 100) + '%';
+            
+            // Load question content
+            document.getElementById('question-text').textContent = question.question;
+            document.getElementById('question-image').innerHTML = question.image;
+            document.getElementById('current-score').textContent = score;
+            
+            // Load options
+            const optionsContainer = document.getElementById('options-container');
+            optionsContainer.innerHTML = '';
+            
+            question.options.forEach((option, index) => {
+                const optionDiv = document.createElement('div');
+                optionDiv.className = 'option-item p-4 border-2 border-gray-200 rounded-lg cursor-pointer hover:border-indigo-300 transition-colors';
+                optionDiv.innerHTML = `
+                    <label class="flex items-center cursor-pointer">
+                        <input type="radio" name="answer" value="${index}" class="mr-3 text-indigo-600">
+                        <span class="text-gray-700">${String.fromCharCode(65 + index)}. ${option}</span>
+                    </label>
+                `;
+                optionDiv.onclick = () => selectOption(index, optionDiv);
+                optionsContainer.appendChild(optionDiv);
+            });
+            
+            document.getElementById('next-btn').disabled = true;
+            selectedAnswer = null;
+        }
+
+        function selectOption(index, element) {
+            // Remove previous selection
+            document.querySelectorAll('.option-item').forEach(item => {
+                item.classList.remove('border-indigo-500', 'bg-indigo-50');
+            });
+            
+            // Highlight selected option
+            element.classList.add('border-indigo-500', 'bg-indigo-50');
+            element.querySelector('input').checked = true;
+            
+            selectedAnswer = index;
+            document.getElementById('next-btn').disabled = false;
+        }
+
+        function nextQuestion() {
+            if (selectedAnswer === null) return;
+            
+            // Store user answer
+            userAnswers.push(selectedAnswer);
+            
+            // Check if answer is correct
+            if (selectedAnswer === quizData[currentQuestion].correct) {
+                score += 10;
+            }
+            
+            currentQuestion++;
+            
+            if (currentQuestion < quizData.length) {
+                loadQuestion();
+            } else {
+                showResult();
+            }
+        }
+
+        function showResult() {
+            document.getElementById('quiz-screen').classList.add('hidden');
+            document.getElementById('result-screen').classList.remove('hidden');
+            
+            const correctAnswers = userAnswers.filter((answer, index) => answer === quizData[index].correct).length;
+            const percentage = Math.round((score / 100) * 100);
+            
+            document.getElementById('final-score').textContent = score;
+            document.getElementById('correct-answers').textContent = correctAnswers;
+            document.getElementById('percentage').textContent = percentage + '%';
+            
+            // Set grade message and icon
+            let message = '';
+            let icon = '';
+            let messageClass = '';
+            
+            if (score >= 90) {
+                message = '🌟 Luar biasa! Anda menguasai materi sistem komputer dengan sangat baik!';
+                icon = '🏆';
+                messageClass = 'bg-yellow-50 border border-yellow-200 text-yellow-800';
+            } else if (score >= 80) {
+                message = '👍 Bagus sekali! Pemahaman Anda tentang sistem komputer sudah baik!';
+                icon = '🎉';
+                messageClass = 'bg-green-50 border border-green-200 text-green-800';
+            } else if (score >= 70) {
+                message = '😊 Cukup baik! Terus belajar untuk meningkatkan pemahaman!';
+                icon = '👏';
+                messageClass = 'bg-blue-50 border border-blue-200 text-blue-800';
+            } else if (score >= 60) {
+                message = '📚 Perlu belajar lebih giat lagi. Jangan menyerah!';
+                icon = '💪';
+                messageClass = 'bg-orange-50 border border-orange-200 text-orange-800';
+            } else {
+                message = '📖 Ayo belajar lagi materi sistem komputer dengan lebih teliti!';
+                icon = '🤔';
+                messageClass = 'bg-red-50 border border-red-200 text-red-800';
+            }
+            
+            document.getElementById('result-icon').textContent = icon;
+            document.getElementById('grade-message').textContent = message;
+            document.getElementById('grade-message').className = `text-lg mb-6 p-4 rounded-lg ${messageClass}`;
+        }
+
+        function showReview() {
+            document.getElementById('result-screen').classList.add('hidden');
+            document.getElementById('review-screen').classList.remove('hidden');
+            
+            const reviewContent = document.getElementById('review-content');
+            reviewContent.innerHTML = '';
+            
+            quizData.forEach((question, index) => {
+                const userAnswer = userAnswers[index];
+                const isCorrect = userAnswer === question.correct;
+                
+                const reviewItem = document.createElement('div');
+                reviewItem.className = `mb-6 p-6 rounded-lg border-2 ${isCorrect ? 'border-green-200 bg-green-50' : 'border-red-200 bg-red-50'}`;
+                
+                reviewItem.innerHTML = `
+                    <div class="flex items-start space-x-4">
+                        <div class="text-2xl">${isCorrect ? '✅' : '❌'}</div>
+                        <div class="flex-1">
+                            <h3 class="font-bold text-gray-800 mb-2">Soal ${index + 1}: ${question.question}</h3>
+                            <div class="mb-3">${question.image}</div>
+                            <div class="space-y-2 mb-3">
+                                ${question.options.map((option, optIndex) => {
+                                    let optionClass = 'p-2 rounded border';
+                                    if (optIndex === question.correct) {
+                                        optionClass += ' bg-green-100 border-green-300 text-green-800';
+                                    } else if (optIndex === userAnswer && userAnswer !== question.correct) {
+                                        optionClass += ' bg-red-100 border-red-300 text-red-800';
+                                    } else {
+                                        optionClass += ' bg-gray-50 border-gray-200';
+                                    }
+                                    return `<div class="${optionClass}">
+                                        ${String.fromCharCode(65 + optIndex)}. ${option}
+                                        ${optIndex === question.correct ? ' ✓' : ''}
+                                        ${optIndex === userAnswer && userAnswer !== question.correct ? ' (Jawaban Anda)' : ''}
+                                    </div>`;
+                                }).join('')}
+                            </div>
+                            <div class="bg-blue-50 p-3 rounded border-l-4 border-blue-400">
+                                <p class="text-sm text-blue-800"><strong>Pembahasan:</strong> ${question.explanation}</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                reviewContent.appendChild(reviewItem);
+            });
+        }
+
+        function restartQuiz() {
+            document.getElementById('result-screen').classList.add('hidden');
+            document.getElementById('review-screen').classList.add('hidden');
+            document.getElementById('start-screen').classList.remove('hidden');
+            currentQuestion = 0;
+            score = 0;
+            userAnswers = [];
+            selectedAnswer = null;
+        }
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'98be91d846cf7550',t:'MTc2MDAyMDE2MS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
