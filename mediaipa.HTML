@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Jodohkan Gambar dan Teks</title>
+  <style>
+    :root{--bg:#dff0d8;--panel:#fff}
+    body{font-family:system-ui,Segoe UI,Roboto,Arial; background:var(--bg); margin:0; padding:20px}
+    .container{max-width:980px;margin:0 auto}
+    h1{margin:0 0 12px}
+    .pool{background:#f7f7f7;border-radius:8px;padding:12px;margin-bottom:14px;display:flex;gap:8px;flex-wrap:wrap}
+    .draggable{padding:8px 12px;border-radius:6px;background:#ffffff;border:1px solid #cfcfcf;cursor:grab;user-select:none}
+    .draggable.used{opacity:0.35;cursor:default}
+    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+    .card{background:var(--panel);padding:10px;border-radius:10px;box-shadow:0 2px 6px rgba(0,0,0,0.06);text-align:center}
+    .card img{max-width:100%;height:140px;object-fit:cover;border-radius:6px}
+    .textarea{width:100%;height:44px;margin-top:8px;border:1px dashed #bfbfbf;border-radius:6px;padding:6px;background:#fff;display:flex;align-items:center;justify-content:center}
+    .textarea.empty{color:#999}
+    .controls{margin-top:16px;display:flex;gap:8px}
+    button{padding:10px 14px;border-radius:8px;border:0;cursor:pointer}
+    button#check{background:#2c7;}
+    button#reset{background:#f66;color:#fff}
+    #feedback{margin-top:12px;font-weight:600}
+    @media (max-width:700px){.grid{grid-template-columns:repeat(2,1fr)}}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Jodohkan Gambar dan Teks (Drag & Drop)</h1>
+    <p>Seret kata dari kolom kata ke area putih di bawah setiap gambar.</p>
+
+    <div>
+      <strong>Kata yang tersedia:</strong>
+      <div class="pool" id="wordPool" aria-label="Kumpulan kata">
+        <!-- dynamic -->
+      </div>
+    </div>
+
+    <div class="grid" id="grid">
+      <!-- cards generated here -->
+    </div>
+
+    <div class="controls">
+      <button id="check">Hasil</button>
+      <button id="reset">Reset</button>
+    </div>
+
+    <div id="feedback" aria-live="polite"></div>
+    <p style="margin-top:10px;color:#555">Terima kasih.</p>
+  </div>
+
+  <script>
+    // Gambar dan teks (sesuai permintaan)
+    const IMAGES = [
+      'https://juna-arjuna.github.io/media-IPA/gambar1.jpg',
+      'https://juna-arjuna.github.io/media-IPA/gambar2.jpg',
+      'https://juna-arjuna.github.io/media-IPA/gambar3.jpg',
+      'https://juna-arjuna.github.io/media-IPA/gambar4.jpg',
+      'https://juna-arjuna.github.io/media-IPA/gambar5.jpg',
+      'https://juna-arjuna.github.io/media-IPA/gambar6.jpg'
+    ];
+
+    // Kata tanpa tanda kurung
+    const WORDS = ['mulut','kerongkongan','lambung','usus 12 jari','usus halus','usus besar'];
+
+    // Mapping jawaban benar berdasarkan nama file gambar (gambar1 -> mulut ...)
+    const CORRECT = {
+      'gambar1': 'mulut',
+      'gambar2': 'kerongkongan',
+      'gambar3': 'lambung',
+      'gambar4': 'usus 12 jari',
+      'gambar5': 'usus halus',
+      'gambar6': 'usus besar'
+    };
+
+    // util shuffle
+    function shuffle(arr){
+      for(let i=arr.length-1;i>0;i--){
+        const j=Math.floor(Math.random()*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]];
+      }
+      return arr;
+    }
+
+    // Render pool and grid
+    const poolEl = document.getElementById('wordPool');
+    const gridEl = document.getElementById('grid');
+    let currentWords = [];
+    let currentImages = [];
+
+    function init(){
+      poolEl.innerHTML=''; gridEl.innerHTML=''; document.getElementById('feedback').textContent='';
+      currentWords = shuffle(WORDS.slice());
+      currentImages = shuffle(IMAGES.slice());
+
+      // create pool
+      currentWords.forEach((w, idx)=>{
+        const span = document.createElement('div');
+        span.className='draggable';
+        span.draggable = true;
+        span.id = 'word-'+idx;
+        span.textContent = w;
+        span.dataset.word = w;
+        span.addEventListener('dragstart', onDragStart);
+        poolEl.appendChild(span);
+      });
+
+      // create cards
+      currentImages.forEach((src, i)=>{
+        const file = src.split('/').pop(); // gambar1.jpg
+        const base = file.replace('.jpg','');
+        const card = document.createElement('div'); card.className='card';
+        card.dataset.image = base; // e.g. gambar1
+
+        const img = document.createElement('img'); img.src = src; img.alt = base;
+        card.appendChild(img);
+
+        const ta = document.createElement('div');
+        ta.className='textarea empty';
+        ta.dataset.target = base; // which image
+        ta.dataset.value = '';
+        ta.textContent = 'Seret kata di sini';
+        ta.addEventListener('dragover', onDragOver);
+        ta.addEventListener('drop', onDrop);
+        card.appendChild(ta);
+
+        gridEl.appendChild(card);
+      });
+    }
+
+    // Drag handlers
+    let draggedId = null;
+    function onDragStart(e){
+      if(this.classList.contains('used')){ e.preventDefault(); return; }
+      draggedId = this.id;
+      e.dataTransfer.setData('text/plain', this.dataset.word);
+      e.dataTransfer.effectAllowed = 'move';
+    }
+
+    function onDragOver(e){ e.preventDefault(); e.dataTransfer.dropEffect='move'; }
+
+    function onDrop(e){
+      e.preventDefault();
+      const word = e.dataTransfer.getData('text/plain');
+      if(!word) return;
+      // mark textarea
+      if(this.dataset.value){
+        // already has a word: do nothing (or replace?) We'll replace: return previous word to pool
+        const prev = this.dataset.value;
+        // find used element with that word and unhide it
+        const usedEl = Array.from(poolEl.children).find(el=>el.dataset.word===prev);
+        if(usedEl) usedEl.classList.remove('used');
+      }
+      this.dataset.value = word;
+      this.classList.remove('empty');
+      this.textContent = word;
+
+      // hide the dragged word in pool
+      const el = document.getElementById(draggedId) || Array.from(poolEl.children).find(el=>el.dataset.word===word);
+      if(el) el.classList.add('used');
+    }
+
+    // Check answers
+    function checkAnswers(){
+      const cards = Array.from(gridEl.querySelectorAll('.card'));
+      let allCorrect = true; let anyEmpty=false;
+      for(const c of cards){
+        const imgId = c.dataset.image; // gambar3
+        const ta = c.querySelector('.textarea');
+        const val = (ta.dataset.value||'').trim();
+        if(!val) { anyEmpty = true; allCorrect = false; continue; }
+        const expected = CORRECT[imgId];
+        if(!expected || val.toLowerCase() !== expected.toLowerCase()){
+          allCorrect = false;
+        }
+      }
+
+      const fb = document.getElementById('feedback');
+      if(allCorrect && !anyEmpty){
+        fb.textContent = 'Hebat. Jawaban anda benar';
+        fb.style.color = 'green';
+      } else {
+        fb.textContent = 'Maaf. Jawaban anda salah. Ulangi lagi';
+        fb.style.color = 'crimson';
+      }
+    }
+
+    // Reset
+    function resetAll(){
+      // restore pool
+      Array.from(poolEl.children).forEach(el=>{ el.classList.remove('used'); });
+      // clear textareas
+      Array.from(gridEl.querySelectorAll('.textarea')).forEach(ta=>{ ta.dataset.value=''; ta.classList.add('empty'); ta.textContent='Seret kata di sini'; });
+      document.getElementById('feedback').textContent='';
+    }
+
+    document.getElementById('check').addEventListener('click', checkAnswers);
+    document.getElementById('reset').addEventListener('click', ()=>{ init(); });
+
+    // Initialize on load
+    init();
+  </script>
+</body>
+</html>
