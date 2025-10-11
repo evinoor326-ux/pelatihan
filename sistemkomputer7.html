@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pembelajaran Sistem Komputer - Kelas 7</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            box-sizing: border-box;
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .bounce {
+            animation: bounce 0.6s ease-in-out;
+        }
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-full font-sans">
+    <div class="container mx-auto px-4 py-6">
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-indigo-800 mb-2">🖥️ Sistem Komputer</h1>
+            <p class="text-lg text-gray-600">Informatika Kelas 7 - Semester Gasal</p>
+        </div>
+
+        <!-- Navigation -->
+        <div class="flex justify-center mb-8">
+            <div class="bg-white rounded-lg shadow-lg p-2 flex space-x-2">
+                <button id="materiBtn" class="px-6 py-3 bg-indigo-600 text-white rounded-lg font-semibold transition-all hover:bg-indigo-700">
+                    📚 Materi
+                </button>
+                <button id="kuisBtn" class="px-6 py-3 bg-gray-200 text-gray-700 rounded-lg font-semibold transition-all hover:bg-gray-300">
+                    🧠 Kuis
+                </button>
+            </div>
+        </div>
+
+        <!-- Materi Section -->
+        <div id="materiSection" class="fade-in">
+            <div class="bg-white rounded-xl shadow-lg p-8 mb-6">
+                <h2 class="text-2xl font-bold text-indigo-700 mb-6 flex items-center">
+                    <span class="mr-3">🎯</span>Pengertian Sistem Komputer
+                </h2>
+                <div class="space-y-4 text-gray-700 leading-relaxed">
+                    <p class="text-lg">
+                        <strong>Sistem Komputer</strong> adalah kumpulan perangkat keras (hardware), perangkat lunak (software), dan pengguna (brainware) yang bekerja sama untuk memproses data menjadi informasi yang berguna.
+                    </p>
+                </div>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-6 mb-6">
+                <!-- Hardware -->
+                <div class="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow">
+                    <div class="text-center mb-4">
+                        <div class="text-4xl mb-2">🔧</div>
+                        <h3 class="text-xl font-bold text-blue-600">Hardware</h3>
+                        <p class="text-sm text-gray-500">Perangkat Keras</p>
+                    </div>
+                    <ul class="space-y-2 text-sm text-gray-700">
+                        <li class="flex items-center"><span class="mr-2">•</span>Processor (CPU)</li>
+                        <li class="flex items-center"><span class="mr-2">•</span>Memory (RAM)</li>
+                        <li class="flex items-center"><span class="mr-2">•</span>Storage (HDD/SSD)</li>
+                        <li class="flex items-center"><span class="mr-2">•</span>Input Device</li>
+                        <li class="flex items-center"><span class="mr-2">•</span>Output Device</li>
+                    </ul>
+                </div>
+
+                <!-- Software -->
+                <div class="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow">
+                    <div class="text-center mb-4">
+                        <div class="text-4xl mb-2">💻</div>
+                        <h3 class="text-xl font-bold text-green-600">Software</h3>
+                        <p class="text-sm text-gray-500">Perangkat Lunak</p>
+                    </div>
+                    <ul class="space-y-2 text-sm text-gray-700">
+                        <li class="flex items-center"><span class="mr-2">•</span>Sistem Operasi</li>
+                        <li class="flex items-center"><span class="mr-2">•</span>Program Aplikasi</li>
+                        <li class="flex items-center"><span class="mr-2">•</span>Driver</li>
+                        <li class="flex items-center"><span class="mr-2">•</span>Utility</li>
+                        <li class="flex items-center"><span class="mr-2">•</span>Programming</li>
+                    </ul>
+                </div>
+
+                <!-- Brainware -->
+                <div class="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow">
+                    <div class="text-center mb-4">
+                        <div class="text-4xl mb-2">👥</div>
+                        <h3 class="text-xl font-bold text-purple-600">Brainware</h3>
+                        <p class="text-sm text-gray-500">Sumber Daya Manusia</p>
+                    </div>
+                    <ul class="space-y-2 text-sm text-gray-700">
+                        <li class="flex items-center"><span class="mr-2">•</span>Programmer</li>
+                        <li class="flex items-center"><span class="mr-2">•</span>System Analyst</li>
+                        <li class="flex items-center"><span class="mr-2">•</span>Administrator</li>
+                        <li class="flex items-center"><span class="mr-2">•</span>Operator</li>
+                        <li class="flex items-center"><span class="mr-2">•</span>End User</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Cara Kerja Komputer -->
+            <div class="bg-white rounded-xl shadow-lg p-8">
+                <h2 class="text-2xl font-bold text-indigo-700 mb-6 flex items-center">
+                    <span class="mr-3">⚙️</span>Cara Kerja Sistem Komputer
+                </h2>
+                <div class="grid md:grid-cols-4 gap-4">
+                    <div class="text-center p-4 bg-blue-50 rounded-lg">
+                        <div class="text-3xl mb-2">📥</div>
+                        <h4 class="font-bold text-blue-600">Input</h4>
+                        <p class="text-sm text-gray-600">Memasukkan data</p>
+                    </div>
+                    <div class="text-center p-4 bg-green-50 rounded-lg">
+                        <div class="text-3xl mb-2">⚡</div>
+                        <h4 class="font-bold text-green-600">Process</h4>
+                        <p class="text-sm text-gray-600">Memproses data</p>
+                    </div>
+                    <div class="text-center p-4 bg-purple-50 rounded-lg">
+                        <div class="text-3xl mb-2">📤</div>
+                        <h4 class="font-bold text-purple-600">Output</h4>
+                        <p class="text-sm text-gray-600">Mengeluarkan hasil</p>
+                    </div>
+                    <div class="text-center p-4 bg-orange-50 rounded-lg">
+                        <div class="text-3xl mb-2">💾</div>
+                        <h4 class="font-bold text-orange-600">Storage</h4>
+                        <p class="text-sm text-gray-600">Menyimpan data</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Kuis Section -->
+        <div id="kuisSection" class="hidden">
+            <div class="bg-white rounded-xl shadow-lg p-8">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-bold text-indigo-700">🧠 Kuis Sistem Komputer</h2>
+                    <div class="text-right">
+                        <div class="text-sm text-gray-500">Soal</div>
+                        <div class="text-lg font-bold text-indigo-600">
+                            <span id="currentQuestion">1</span> / <span id="totalQuestions">10</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="questionContainer" class="mb-6">
+                    <!-- Questions will be loaded here -->
+                </div>
+
+                <div class="flex justify-between items-center">
+                    <button id="prevBtn" class="px-6 py-3 bg-gray-300 text-gray-600 rounded-lg font-semibold cursor-not-allowed" disabled>
+                        ← Sebelumnya
+                    </button>
+                    <div id="scoreDisplay" class="text-center hidden">
+                        <div class="text-2xl font-bold text-green-600 mb-2">🎉 Selamat!</div>
+                        <div class="text-lg">Skor Anda: <span id="finalScore" class="font-bold text-indigo-600"></span></div>
+                        <button id="restartBtn" class="mt-4 px-6 py-3 bg-indigo-600 text-white rounded-lg font-semibold hover:bg-indigo-700">
+                            🔄 Ulangi Kuis
+                        </button>
+                    </div>
+                    <button id="nextBtn" class="px-6 py-3 bg-indigo-600 text-white rounded-lg font-semibold hover:bg-indigo-700">
+                        Selanjutnya →
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Quiz data
+        const questions = [
+            {
+                question: "Apa yang dimaksud dengan sistem komputer?",
+                options: [
+                    "Hanya perangkat keras komputer",
+                    "Kumpulan hardware, software, dan brainware yang bekerja sama",
+                    "Program aplikasi di komputer",
+                    "Jaringan internet"
+                ],
+                correct: 1
+            },
+            {
+                question: "Manakah yang termasuk komponen hardware?",
+                options: [
+                    "Microsoft Word",
+                    "Windows 10",
+                    "Processor (CPU)",
+                    "Antivirus"
+                ],
+                correct: 2
+            },
+            {
+                question: "Apa fungsi utama CPU dalam sistem komputer?",
+                options: [
+                    "Menyimpan data permanen",
+                    "Menampilkan gambar ke layar",
+                    "Memproses data dan instruksi",
+                    "Menghubungkan ke internet"
+                ],
+                correct: 2
+            },
+            {
+                question: "Yang termasuk perangkat input adalah...",
+                options: [
+                    "Monitor",
+                    "Speaker",
+                    "Printer",
+                    "Keyboard"
+                ],
+                correct: 3
+            },
+            {
+                question: "Sistem operasi termasuk dalam kategori...",
+                options: [
+                    "Hardware",
+                    "Software",
+                    "Brainware",
+                    "Firmware"
+                ],
+                correct: 1
+            },
+            {
+                question: "Urutan proses kerja komputer yang benar adalah...",
+                options: [
+                    "Output → Input → Process → Storage",
+                    "Input → Process → Output → Storage",
+                    "Process → Input → Output → Storage",
+                    "Storage → Process → Input → Output"
+                ],
+                correct: 1
+            },
+            {
+                question: "RAM berfungsi untuk...",
+                options: [
+                    "Menyimpan data secara permanen",
+                    "Memproses data",
+                    "Menyimpan data sementara saat komputer bekerja",
+                    "Menampilkan gambar"
+                ],
+                correct: 2
+            },
+            {
+                question: "Contoh perangkat output adalah...",
+                options: [
+                    "Mouse",
+                    "Webcam",
+                    "Microphone",
+                    "Monitor"
+                ],
+                correct: 3
+            },
+            {
+                question: "Yang termasuk brainware adalah...",
+                options: [
+                    "Motherboard",
+                    "Programmer",
+                    "Antivirus",
+                    "Hard disk"
+                ],
+                correct: 1
+            },
+            {
+                question: "Perbedaan utama HDD dan SSD adalah...",
+                options: [
+                    "HDD lebih cepat dari SSD",
+                    "SSD menggunakan piringan berputar, HDD tidak",
+                    "SSD lebih cepat dan tidak ada bagian bergerak",
+                    "Tidak ada perbedaan"
+                ],
+                correct: 2
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let userAnswers = [];
+        let score = 0;
+
+        // Navigation
+        document.getElementById('materiBtn').addEventListener('click', function() {
+            showSection('materi');
+        });
+
+        document.getElementById('kuisBtn').addEventListener('click', function() {
+            showSection('kuis');
+        });
+
+        function showSection(section) {
+            const materiSection = document.getElementById('materiSection');
+            const kuisSection = document.getElementById('kuisSection');
+            const materiBtn = document.getElementById('materiBtn');
+            const kuisBtn = document.getElementById('kuisBtn');
+
+            if (section === 'materi') {
+                materiSection.classList.remove('hidden');
+                kuisSection.classList.add('hidden');
+                materiBtn.classList.add('bg-indigo-600', 'text-white');
+                materiBtn.classList.remove('bg-gray-200', 'text-gray-700');
+                kuisBtn.classList.add('bg-gray-200', 'text-gray-700');
+                kuisBtn.classList.remove('bg-indigo-600', 'text-white');
+            } else {
+                materiSection.classList.add('hidden');
+                kuisSection.classList.remove('hidden');
+                kuisBtn.classList.add('bg-indigo-600', 'text-white');
+                kuisBtn.classList.remove('bg-gray-200', 'text-gray-700');
+                materiBtn.classList.add('bg-gray-200', 'text-gray-700');
+                materiBtn.classList.remove('bg-indigo-600', 'text-white');
+                loadQuestion();
+            }
+        }
+
+        function loadQuestion() {
+            const question = questions[currentQuestionIndex];
+            const container = document.getElementById('questionContainer');
+            
+            container.innerHTML = `
+                <div class="fade-in">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-6">${question.question}</h3>
+                    <div class="space-y-3">
+                        ${question.options.map((option, index) => `
+                            <label class="flex items-center p-4 bg-gray-50 rounded-lg cursor-pointer hover:bg-gray-100 transition-colors">
+                                <input type="radio" name="answer" value="${index}" class="mr-3 text-indigo-600">
+                                <span class="text-gray-700">${option}</span>
+                            </label>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+
+            // Update question counter
+            document.getElementById('currentQuestion').textContent = currentQuestionIndex + 1;
+            
+            // Update navigation buttons
+            updateNavigationButtons();
+            
+            // Restore previous answer if exists
+            if (userAnswers[currentQuestionIndex] !== undefined) {
+                const radio = container.querySelector(`input[value="${userAnswers[currentQuestionIndex]}"]`);
+                if (radio) radio.checked = true;
+            }
+        }
+
+        function updateNavigationButtons() {
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            
+            prevBtn.disabled = currentQuestionIndex === 0;
+            prevBtn.className = currentQuestionIndex === 0 
+                ? 'px-6 py-3 bg-gray-300 text-gray-600 rounded-lg font-semibold cursor-not-allowed'
+                : 'px-6 py-3 bg-gray-500 text-white rounded-lg font-semibold hover:bg-gray-600 cursor-pointer';
+            
+            nextBtn.textContent = currentQuestionIndex === questions.length - 1 ? 'Selesai 🎯' : 'Selanjutnya →';
+        }
+
+        // Navigation event listeners
+        document.getElementById('prevBtn').addEventListener('click', function() {
+            if (currentQuestionIndex > 0) {
+                saveCurrentAnswer();
+                currentQuestionIndex--;
+                loadQuestion();
+            }
+        });
+
+        document.getElementById('nextBtn').addEventListener('click', function() {
+            saveCurrentAnswer();
+            
+            if (currentQuestionIndex < questions.length - 1) {
+                currentQuestionIndex++;
+                loadQuestion();
+            } else {
+                showResults();
+            }
+        });
+
+        document.getElementById('restartBtn').addEventListener('click', function() {
+            currentQuestionIndex = 0;
+            userAnswers = [];
+            score = 0;
+            document.getElementById('scoreDisplay').classList.add('hidden');
+            document.getElementById('nextBtn').classList.remove('hidden');
+            document.getElementById('prevBtn').classList.remove('hidden');
+            loadQuestion();
+        });
+
+        function saveCurrentAnswer() {
+            const selectedAnswer = document.querySelector('input[name="answer"]:checked');
+            if (selectedAnswer) {
+                userAnswers[currentQuestionIndex] = parseInt(selectedAnswer.value);
+            }
+        }
+
+        function showResults() {
+            // Calculate score
+            score = 0;
+            for (let i = 0; i < questions.length; i++) {
+                if (userAnswers[i] === questions[i].correct) {
+                    score++;
+                }
+            }
+
+            // Show results
+            document.getElementById('questionContainer').innerHTML = `
+                <div class="text-center fade-in">
+                    <div class="text-6xl mb-4">🎊</div>
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4">Kuis Selesai!</h3>
+                    <div class="bg-gradient-to-r from-indigo-500 to-purple-600 text-white p-6 rounded-xl mb-6">
+                        <div class="text-3xl font-bold mb-2">${score} / ${questions.length}</div>
+                        <div class="text-lg">Skor: ${Math.round((score/questions.length)*100)}%</div>
+                    </div>
+                    <div class="text-left bg-gray-50 p-6 rounded-lg">
+                        <h4 class="font-bold text-gray-800 mb-4">📊 Review Jawaban:</h4>
+                        ${questions.map((q, index) => `
+                            <div class="mb-3 p-3 rounded ${userAnswers[index] === q.correct ? 'bg-green-100' : 'bg-red-100'}">
+                                <div class="font-semibold text-sm mb-1">Soal ${index + 1}: ${userAnswers[index] === q.correct ? '✅' : '❌'}</div>
+                                <div class="text-sm text-gray-600">${q.question}</div>
+                                <div class="text-sm mt-1">
+                                    <span class="text-green-600">Jawaban benar: ${q.options[q.correct]}</span>
+                                    ${userAnswers[index] !== q.correct ? `<br><span class="text-red-600">Jawaban Anda: ${q.options[userAnswers[index]] || 'Tidak dijawab'}</span>` : ''}
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('nextBtn').classList.add('hidden');
+            document.getElementById('prevBtn').classList.add('hidden');
+            document.getElementById('scoreDisplay').classList.remove('hidden');
+            document.getElementById('finalScore').textContent = `${score}/${questions.length} (${Math.round((score/questions.length)*100)}%)`;
+        }
+
+        // Initialize
+        document.getElementById('totalQuestions').textContent = questions.length;
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'98cb6e4cc6746bf4',t:'MTc2MDE1NTAyMC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
